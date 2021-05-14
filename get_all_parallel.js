@@ -3,11 +3,13 @@ const conseilUtil = require("./lib/conseilUtil");
 const getIPFS = require("./lib/get.IPFS");
 
  (async () => {
+   const OUTPUT_FILENAME = 'all_metadata.json';
    let all_metadata = {};
    try {
-     all_metadata = JSON.parse(fs.readFileSync('data/all_metadata.json'));
+     all_metadata = JSON.parse(fs.readFileSync(OUTPUT_FILENAME));
    } catch(e) { }
 
+   // TODO replace 80000 with a determination of the latest mint.
    const objkt_ids = [...Array(80000).keys()]
      .filter(i => !(i in all_metadata))
      .map(i => (i).toString());
@@ -23,6 +25,8 @@ const getIPFS = require("./lib/get.IPFS");
     await Promise.all(chunk.map( async (pair) => {
       const objkt_id = pair[0];
       const ipfshash = pair[1];
+      // Annoyingly ipfs cat hangs indefinitely on these.
+      // TODO add a timeout to getIPFS.js and remove these manual filters
       if(ipfshash=='QmTb9Px2w8t4YkzHrX6dK4KpMSUdfgCCy49o61GEJXCuhC') return; // bad somehow ipfs has lost this ??
       if(ipfshash=='QmUZxF8fZCcr2HfqggWF3M5JZD88ScNsMnKcKWAAn2e7Hh') return; // bad somehow
       if(ipfshash=='QmTUJvxbBTrrBBKgJcxcyM8uYpRjrhCaMtkwDncdAq6KJH') return; // bad somehow
@@ -45,11 +49,9 @@ const getIPFS = require("./lib/get.IPFS");
     console.log("Block:", i, "Read: ", newdata);
     if(((newdata+1)%100)==0) {
       console.log("Writing..");
-      fs.writeFileSync('data/all_metadata.json',
-          JSON.stringify(all_metadata))
+      fs.writeFileSync('OUTPUT_FILENAME', JSON.stringify(all_metadata))
     }
    };
-   fs.writeFileSync('data/all_metadata.json',
-          JSON.stringify(all_metadata))
+      fs.writeFileSync('OUTPUT_FILENAME', JSON.stringify(all_metadata))
 
  })();
