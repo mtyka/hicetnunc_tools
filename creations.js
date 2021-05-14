@@ -22,7 +22,7 @@ if(!tz) {
 const getWalletMetadata = require("./lib/get.wallet.metadata.js");
 
 const baseURL = `https://www.hicetnunc.xyz/objkt/`;
-
+const HEN_protocol = 'KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9';
 console.log(`⚡ fetching creation info for address ${tz}...`);
 
 wallet_owner = async(wallet) => {

@@ -20,6 +20,7 @@
     "bignumber.js": "9.0.1",
     "conseiljs": "^5.0.8-1",
     "conseiljs-softsigner": "*",
+    "loglevel": "*",
     "node-fetch": "2.6.1"
   }
 }
